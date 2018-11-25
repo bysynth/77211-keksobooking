@@ -1,7 +1,8 @@
 'use strict';
 
 var map = document.querySelector('.map');
-var pin = document.querySelector('.map__pin--main');
+var pinsBlock = document.querySelector('.map__pins');
+var pinTemplate = document.querySelector('#pin').content;
 
 map.classList.remove('map--faded');
 
@@ -18,6 +19,8 @@ var PRICE_MAX = 1000000;
 var ROOMS_MIN = 1;
 var ROOMS_MAX = 5;
 var MOCKS_COUNT = 8;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
 
 var generateRandomNumberFromRange = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
@@ -53,9 +56,10 @@ var getElementWidth = function (element) {
   return element.offsetWidth;
 };
 
+// В функции специально добавлены значения PIN_WIDTH / 2 чтобы пины не выходили за границы карты
 var generateLocationX = function () {
-  var min = Math.round(getElementWidth(pin) / 2);
-  var max = getElementWidth(map);
+  var min = PIN_WIDTH / 2;
+  var max = getElementWidth(map) - PIN_WIDTH / 2;
 
   return generateRandomNumberFromRange(min, max);
 };
@@ -98,4 +102,29 @@ var generateMockDataArray = function (number) {
   return array;
 };
 
+var generatePin = function (data, i) {
+  var pinElement = pinTemplate.cloneNode(true);
+  var button = pinElement.querySelector('button');
+  var img = pinElement.querySelector('img');
+
+  button.style.left = (data[i].location.x - PIN_WIDTH / 2) + 'px';
+  button.style.top = (data[i].location.y - PIN_HEIGHT) + 'px';
+  img.src = data[i].author.avatar;
+  img.alt = data[i].offer.title;
+
+  return pinElement;
+};
+
+var renderPins = function (notices) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < notices.length; i++) {
+    fragment.appendChild(generatePin(notices, i));
+  }
+
+  pinsBlock.appendChild(fragment);
+};
+
 var mockData = generateMockDataArray(MOCKS_COUNT);
+
+renderPins(mockData);
