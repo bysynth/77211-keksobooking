@@ -148,20 +148,21 @@ var generateCard = function (ad) {
   var description = cardElement.querySelector('.popup__description');
   var photos = cardElement.querySelector('.popup__photos');
 
-  var typeString = '';
-  switch (ad.offer.type) {
-    case 'flat':
-      typeString = 'Квартира';
-      break;
-    case 'bungalo':
-      typeString = 'Бунгало';
-      break;
-    case 'house':
-      typeString = 'Дом';
-      break;
-    case 'palace':
-      typeString = 'Дворец';
-  }
+  var types = {
+    flat: {
+      ru: 'Квартира'
+    },
+    bungalo: {
+      ru: 'Бунгало'
+    },
+    house: {
+      ru: 'Дом'
+    },
+    palace: {
+      ru: 'Дворец'
+    }
+  };
+
   var roomsString = '';
   switch (ad.offer.rooms.toString()) {
     case '1':
@@ -192,7 +193,7 @@ var generateCard = function (ad) {
   title.textContent = ad.offer.title;
   address.textContent = ad.offer.address;
   price.textContent = ad.offer.price + '₽/ночь';
-  type.textContent = typeString;
+  type.textContent = types[ad.offer.type].ru;
   capacity.textContent = ad.offer.rooms + roomsString + ad.offer.guests + guestsString;
   time.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
 
@@ -241,4 +242,4 @@ var renderCard = function () {
 var mockData = generateMockDataArray(MOCKS_COUNT);
 
 renderPins(mockData);
-renderCard();
+renderCard();s
