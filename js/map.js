@@ -135,6 +135,20 @@ var clearNode = function (node) {
   }
 };
 
+var numDecline = function (num, a, b, c) {
+  var numberString = num.toString();
+  var numberStringLength = numberString.length;
+  var lastNumber = parseInt(numberString[numberStringLength - 1], 10);
+  var lastTwoNumbers = parseInt(numberString.slice(-2), 10);
+
+  if (lastNumber === 1 && lastTwoNumbers !== 11) {
+    return a;
+  } else if (lastNumber === 2 && lastTwoNumbers !== 12 || lastNumber === 3 && lastTwoNumbers !== 13 || lastNumber === 4 && lastTwoNumbers !== 14) {
+    return b;
+  }
+  return c;
+};
+
 var generateCard = function (ad) {
   var cardElement = cardTemplate.cloneNode(true);
   var featuresNode = cardElement.querySelector('.popup__features');
@@ -163,31 +177,8 @@ var generateCard = function (ad) {
     }
   };
 
-  var roomsString = '';
-  switch (ad.offer.rooms.toString()) {
-    case '1':
-      roomsString = ' комната для ';
-      break;
-    case '2':
-    case '3':
-    case '4':
-      roomsString = ' комнаты для ';
-      break;
-    case '5':
-      roomsString = ' комнат для ';
-  }
-  var guestsString = '';
-  switch (ad.offer.guests.toString()) {
-    case '1':
-      guestsString = ' гостя';
-      break;
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-      guestsString = ' гостей';
-      break;
-  }
+  var roomsString = numDecline(ad.offer.rooms, ' комната для ', ' комнаты для ', ' комнат для ');
+  var guestsString = numDecline(ad.offer.guests, ' гостя', ' гостей', ' гостей');
 
   avatar.src = ad.author.avatar;
   title.textContent = ad.offer.title;
