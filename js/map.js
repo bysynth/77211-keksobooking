@@ -233,4 +233,4 @@ var renderCard = function () {
 var mockData = generateMockDataArray(MOCKS_COUNT);
 
 renderPins(mockData);
-renderCard();s
+renderCard();
