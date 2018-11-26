@@ -32,14 +32,16 @@ var takeRandomElement = function (array) {
 };
 
 var shuffleArray = function (array) {
-  for (var i = array.length - 1; i > 0; i--) {
+  var arrayCopy = array.slice();
+
+  for (var i = arrayCopy.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+    var temp = arrayCopy[i];
+    arrayCopy[i] = arrayCopy[j];
+    arrayCopy[j] = temp;
   }
 
-  return array;
+  return arrayCopy;
 };
 
 var generateArrayWithRandomStrings = function (array) {
@@ -105,11 +107,13 @@ var generateMockDataArray = function (number) {
 
 var generatePin = function (data, i) {
   var pinElement = pinTemplate.cloneNode(true);
+  var button = pinElement.querySelector('button');
+  var img = pinElement.querySelector('img');
 
-  pinElement.querySelector('button').style.left = (data[i].location.x - PIN_WIDTH / 2) + 'px';
-  pinElement.querySelector('button').style.top = (data[i].location.y - PIN_HEIGHT) + 'px';
-  pinElement.querySelector('img').src = data[i].author.avatar;
-  pinElement.querySelector('img').alt = data[i].offer.title;
+  button.style.left = (data[i].location.x - PIN_WIDTH / 2) + 'px';
+  button.style.top = (data[i].location.y - PIN_HEIGHT) + 'px';
+  img.src = data[i].author.avatar;
+  img.alt = data[i].offer.title;
 
   return pinElement;
 };
