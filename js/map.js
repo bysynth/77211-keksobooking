@@ -193,26 +193,7 @@ var generateCard = function (ad) {
   for (var i = 0; i < ad.offer.features.length; i++) {
     var feature = ad.offer.features[i];
 
-    switch (feature) {
-      case 'wifi':
-        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--wifi"></li>');
-        break;
-      case 'dishwasher':
-        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--dishwasher"></li>');
-        break;
-      case 'parking':
-        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--parking"></li>');
-        break;
-      case 'washer':
-        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--washer"></li>');
-        break;
-      case 'elevator':
-        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--elevator"></li>');
-        break;
-      case 'conditioner':
-        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--conditioner"></li>');
-        break;
-    }
+    featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + feature + '"></li>');
   }
 
   description.textContent = ad.offer.description;
