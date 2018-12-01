@@ -135,18 +135,19 @@ var clearNode = function (node) {
   }
 };
 
-var numDecline = function (num, a, b, c) {
-  var numberString = num.toString();
-  var numberStringLength = numberString.length;
-  var lastNumber = parseInt(numberString[numberStringLength - 1], 10);
-  var lastTwoNumbers = parseInt(numberString.slice(-2), 10);
-
-  if (lastNumber === 1 && lastTwoNumbers !== 11) {
-    return a;
-  } else if (lastNumber === 2 && lastTwoNumbers !== 12 || lastNumber === 3 && lastTwoNumbers !== 13 || lastNumber === 4 && lastTwoNumbers !== 14) {
-    return b;
+var numDecline = function (count, one, two, five) {
+  count = Math.floor(Math.abs(count)) % 100;
+  if (count > 10 && count < 20) {
+    return five;
   }
-  return c;
+  count = count % 10;
+  if (count === 1) {
+    return one;
+  }
+  if (count >= 2 && count <= 4) {
+    return two;
+  }
+  return five;
 };
 
 var generateCard = function (ad) {
