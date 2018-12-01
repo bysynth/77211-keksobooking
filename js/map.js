@@ -5,7 +5,15 @@ var pinsBlock = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content;
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
-map.classList.remove('map--faded');
+var fieldsets = document.querySelectorAll('fieldset');
+var disableFieldsets = function (fieldsetsArray) {
+  for (var i = 0; i < fieldsetsArray.length; i++) {
+    fieldsetsArray[i].setAttribute('disabled', '');
+  }
+};
+disableFieldsets(fieldsets);
+
+// map.classList.remove('map--faded'); Включаю затенение карты
 
 var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -214,5 +222,5 @@ var renderCard = function () {
 
 var mockData = generateMockDataArray(MOCKS_COUNT);
 
-renderPins(mockData);
-renderCard();
+// renderPins(mockData); Отключаю отрисовку пинов
+// renderCard(); Отключаю отрисовку карточки с информацией
