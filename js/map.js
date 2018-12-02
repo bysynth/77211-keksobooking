@@ -1,20 +1,5 @@
 'use strict';
 
-var map = document.querySelector('.map');
-var pinsBlock = document.querySelector('.map__pins');
-var pinTemplate = document.querySelector('#pin').content;
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-
-var fieldsets = document.querySelectorAll('fieldset');
-var disableFieldsets = function (fieldsetsArray) {
-  for (var i = 0; i < fieldsetsArray.length; i++) {
-    fieldsetsArray[i].setAttribute('disabled', '');
-  }
-};
-disableFieldsets(fieldsets);
-
-// map.classList.remove('map--faded'); Включаю затенение карты
-
 var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
@@ -30,6 +15,109 @@ var ROOMS_MAX = 5;
 var MOCKS_COUNT = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var MAIN_PIN_WIDTH = 65;
+var MAIN_PIN_HEIGHT = 65;
+var MAIN_PIN_ARROW_HEIGHT = 22;
+
+// -------------------------------------------------------------------
+
+var map = document.querySelector('.map');
+var mainPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var fieldsets = document.querySelectorAll('fieldset');
+var addressInput = adForm.querySelector('#address');
+
+var pinTemplate = document.querySelector('#pin').content;
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+var pinsBlock = document.querySelector('.map__pins');
+
+// -------------------------------------------------------------------
+
+var impactFieldsets = function (fieldsetsArray, impact) {
+  switch (impact) {
+    case 'set':
+      for (var i = 0; i < fieldsetsArray.length; i++) {
+        fieldsetsArray[i].setAttribute('disabled', '');
+      }
+      break;
+    case 'remove':
+      for (var j = 0; j < fieldsetsArray.length; j++) {
+        fieldsetsArray[j].removeAttribute('disabled');
+      }
+      break;
+  }
+};
+
+// -------------------------------------------------------------------
+
+var getCoordinates = function (element) {
+  var boxData = element.getBoundingClientRect();
+
+  var boxCoordinates = {
+    top: boxData.top + window.pageYOffset,
+    left: boxData.left + window.pageXOffset
+  };
+  return boxCoordinates;
+};
+
+var getMainPinInactiveCoordinates = function () {
+  var pinData = getCoordinates(mainPin);
+  var mapData = getCoordinates(map);
+
+  var inactiveCoordinates = {
+    top: pinData.top + Math.round(MAIN_PIN_WIDTH / 2),
+    left: pinData.left + Math.round(MAIN_PIN_HEIGHT / 2) - mapData.left
+  };
+  return inactiveCoordinates;
+};
+
+var getMainPinActiveCoordinates = function () {
+  var pinData = getCoordinates(mainPin);
+  var inactiveCoordinates = getMainPinInactiveCoordinates();
+
+  var activeCoordinates = {
+    top: pinData.top + MAIN_PIN_HEIGHT + MAIN_PIN_ARROW_HEIGHT,
+    left: inactiveCoordinates.left
+  };
+  return activeCoordinates;
+};
+
+var setAddressCoordinates = function (coords) {
+  var x = coords.left;
+  var y = coords.top;
+
+  var value = addressInput.value = x + ', ' + y;
+  return value;
+};
+
+// ----- Установка неактивного состояния страницы -----
+
+impactFieldsets(fieldsets, 'set');
+var inactivePageAddressCoordinates = getMainPinInactiveCoordinates();
+setAddressCoordinates(inactivePageAddressCoordinates);
+
+
+// -------------------------------------------------------------------
+
+var activePageAddressCoordinates = getMainPinActiveCoordinates();
+
+var activatePage = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  impactFieldsets(fieldsets, 'remove');
+};
+
+var activateApplication = function () {
+  activatePage();
+  setAddressCoordinates(activePageAddressCoordinates);
+};
+
+// ----- Активация страницы -----
+
+mainPin.addEventListener('mouseup', activateApplication);
+
+// -------------------------------------------------------------------
 
 var generateRandomNumberFromRange = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
@@ -67,7 +155,6 @@ var getElementWidth = function (element) {
   return element.offsetWidth;
 };
 
-// В функции специально добавлены значения PIN_WIDTH / 2 чтобы пины не выходили за границы карты
 var generateLocationX = function () {
   var min = PIN_WIDTH / 2;
   var max = getElementWidth(map) - PIN_WIDTH / 2;
