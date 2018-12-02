@@ -18,6 +18,7 @@ var PIN_HEIGHT = 70;
 var MAIN_PIN_WIDTH = 65;
 var MAIN_PIN_HEIGHT = 65;
 var MAIN_PIN_ARROW_HEIGHT = 22;
+var ESC_CODE = 27;
 
 // -------------------------------------------------------------------
 
@@ -26,11 +27,10 @@ var mainPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var fieldsets = document.querySelectorAll('fieldset');
 var addressInput = adForm.querySelector('#address');
+var pinsBlock = document.querySelector('.map__pins');
 
 var pinTemplate = document.querySelector('#pin').content;
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-
-var pinsBlock = document.querySelector('.map__pins');
 
 // -------------------------------------------------------------------
 
@@ -48,8 +48,6 @@ var impactFieldsets = function (fieldsetsArray, impact) {
       break;
   }
 };
-
-// -------------------------------------------------------------------
 
 var getCoordinates = function (element) {
   var boxData = element.getBoundingClientRect();
@@ -96,26 +94,6 @@ var setAddressCoordinates = function (coords) {
 impactFieldsets(fieldsets, 'set');
 var inactivePageAddressCoordinates = getMainPinInactiveCoordinates();
 setAddressCoordinates(inactivePageAddressCoordinates);
-
-
-// -------------------------------------------------------------------
-
-var activePageAddressCoordinates = getMainPinActiveCoordinates();
-
-var activatePage = function () {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  impactFieldsets(fieldsets, 'remove');
-};
-
-var activateApplication = function () {
-  activatePage();
-  setAddressCoordinates(activePageAddressCoordinates);
-};
-
-// ----- Активация страницы -----
-
-mainPin.addEventListener('mouseup', activateApplication);
 
 // -------------------------------------------------------------------
 
@@ -257,6 +235,7 @@ var generateCard = function (ad) {
   var time = cardElement.querySelector('.popup__text--time');
   var description = cardElement.querySelector('.popup__description');
   var photos = cardElement.querySelector('.popup__photos');
+  var closePopup = cardElement.querySelector('.popup__close');
 
   var types = {
     flat: {
@@ -300,14 +279,95 @@ var generateCard = function (ad) {
     photos.insertAdjacentHTML('beforeend', '<img src="' + ad.offer.photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
   }
 
-  return cardElement;
-};
+  closePopup.addEventListener('click', deleteCard);
+  document.addEventListener('keydown', popupKeydownHandler);
 
-var renderCard = function () {
-  map.insertBefore(generateCard(mockData[0]), map.children[1]);
+  return cardElement;
 };
 
 var mockData = generateMockDataArray(MOCKS_COUNT);
 
-// renderPins(mockData); Отключаю отрисовку пинов
-// renderCard(); Отключаю отрисовку карточки с информацией
+// -------------------------------------------------------------------
+
+var renderCard = function (dataObj) {
+  var card = generateCard(dataObj);
+  map.insertBefore(card, map.children[1]);
+};
+
+var deleteCard = function () {
+  map.querySelector('.popup').remove();
+  clearPinActiveClass();
+};
+
+// -------------------------------------------------------------------
+
+var pinClickHandler = function (evt) {
+  if (map.querySelector('.popup')) {
+    deleteCard();
+  }
+
+  var altText = evt.currentTarget.children[0].alt;
+
+  for (var i = 0; i < mockData.length; i++) {
+    if (mockData[i].offer.title === altText) {
+      renderCard(mockData[i]);
+    }
+  }
+
+  evt.currentTarget.classList.add('map__pin--active');
+};
+
+var popupKeydownHandler = function (evt) {
+  if (evt.keyCode === ESC_CODE) {
+    deleteCard();
+  }
+  document.removeEventListener('keydown', popupKeydownHandler);
+};
+
+// -------------------------------------------------------------------
+
+var getPinsNodeList = function () {
+  var allPinsNodeList = pinsBlock.querySelectorAll('.map__pin');
+  var pinsNodeList = Array.from(allPinsNodeList).slice(1);
+  return pinsNodeList;
+};
+
+var setPinsEventListner = function () {
+  var pinsNodeList = getPinsNodeList();
+
+  for (var i = 0; i < pinsNodeList.length; i++) {
+    pinsNodeList[i].addEventListener('click', pinClickHandler);
+  }
+};
+
+var clearPinActiveClass = function () {
+  var pinsNodeList = getPinsNodeList();
+
+  for (var i = 0; i < pinsNodeList.length; i++) {
+    if (pinsNodeList[i].classList.contains('map__pin--active')) {
+      pinsNodeList[i].classList.remove('map__pin--active');
+      pinsNodeList[i].blur();
+    }
+  }
+};
+
+// -------------------------------------------------------------------
+
+var activePageAddressCoordinates = getMainPinActiveCoordinates();
+
+var activatePage = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  impactFieldsets(fieldsets, 'remove');
+};
+
+// ----- Активация страницы -----
+
+var activateApplication = function () {
+  activatePage();
+  setAddressCoordinates(activePageAddressCoordinates);
+  renderPins(mockData);
+  setPinsEventListner();
+};
+
+mainPin.addEventListener('mouseup', activateApplication);
