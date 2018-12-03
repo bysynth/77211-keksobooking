@@ -23,29 +23,20 @@ var ESC_CODE = 27;
 // -------------------------------------------------------------------
 
 var map = document.querySelector('.map');
-var mainPin = document.querySelector('.map__pin--main');
+var mainPin = map.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var fieldsets = document.querySelectorAll('fieldset');
+var fieldsets = adForm.querySelectorAll('fieldset');
 var addressInput = adForm.querySelector('#address');
-var pinsBlock = document.querySelector('.map__pins');
+var pinsBlock = map.querySelector('.map__pins');
 
 var pinTemplate = document.querySelector('#pin').content;
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 // -------------------------------------------------------------------
 
-var impactFieldsets = function (fieldsetsArray, impact) {
-  switch (impact) {
-    case 'set':
-      for (var i = 0; i < fieldsetsArray.length; i++) {
-        fieldsetsArray[i].setAttribute('disabled', '');
-      }
-      break;
-    case 'remove':
-      for (var j = 0; j < fieldsetsArray.length; j++) {
-        fieldsetsArray[j].removeAttribute('disabled');
-      }
-      break;
+var changeFieldsetState = function (state) {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = state;
   }
 };
 
@@ -91,7 +82,7 @@ var setAddressCoordinates = function (coords) {
 
 // ----- Установка неактивного состояния страницы -----
 
-impactFieldsets(fieldsets, 'set');
+changeFieldsetState(true);
 var inactivePageAddressCoordinates = getMainPinInactiveCoordinates();
 setAddressCoordinates(inactivePageAddressCoordinates);
 
@@ -358,16 +349,17 @@ var activePageAddressCoordinates = getMainPinActiveCoordinates();
 var activatePage = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  impactFieldsets(fieldsets, 'remove');
+  changeFieldsetState(false);
 };
 
 // ----- Активация страницы -----
 
-var activateApplication = function () {
+var activateApplicationHandler = function () {
   activatePage();
   setAddressCoordinates(activePageAddressCoordinates);
   renderPins(mockData);
   setPinsEventListner();
+  mainPin.removeEventListener('mouseup', activateApplicationHandler);
 };
 
-mainPin.addEventListener('mouseup', activateApplication);
+mainPin.addEventListener('mouseup', activateApplicationHandler);
