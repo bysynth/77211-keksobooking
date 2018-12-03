@@ -179,6 +179,8 @@ var generatePin = function (data, i) {
   img.src = data[i].author.avatar;
   img.alt = data[i].offer.title;
 
+  button.addEventListener('click', pinClickHandler);
+
   return pinElement;
 };
 
@@ -285,6 +287,13 @@ var renderCard = function (dataObj) {
   map.insertBefore(card, map.children[1]);
 };
 
+var clearPinActiveClass = function () {
+  var activePin = pinsBlock.querySelector('.map__pin--active');
+
+  activePin.classList.remove('map__pin--active');
+  activePin.blur();
+};
+
 var deleteCard = function () {
   map.querySelector('.popup').remove();
   clearPinActiveClass();
@@ -317,29 +326,6 @@ var popupKeydownHandler = function (evt) {
 
 // -------------------------------------------------------------------
 
-var getPinsNodeList = function () {
-  var allPinsNodeList = pinsBlock.querySelectorAll('.map__pin');
-  var pinsNodeList = Array.from(allPinsNodeList).slice(1);
-  return pinsNodeList;
-};
-
-var setPinsEventListner = function () {
-  var pinsNodeList = getPinsNodeList();
-
-  for (var i = 0; i < pinsNodeList.length; i++) {
-    pinsNodeList[i].addEventListener('click', pinClickHandler);
-  }
-};
-
-var clearPinActiveClass = function () {
-  var activePin = pinsBlock.querySelector('.map__pin--active');
-
-  activePin.classList.remove('map__pin--active');
-  activePin.blur();
-};
-
-// -------------------------------------------------------------------
-
 var activePageAddressCoordinates = getMainPinActiveCoordinates();
 
 var activatePage = function () {
@@ -354,7 +340,6 @@ var activateApplicationHandler = function () {
   activatePage();
   setAddressCoordinates(activePageAddressCoordinates);
   renderPins(mockData);
-  setPinsEventListner();
   mainPin.removeEventListener('mouseup', activateApplicationHandler);
 };
 
