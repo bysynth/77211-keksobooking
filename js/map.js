@@ -332,14 +332,10 @@ var setPinsEventListner = function () {
 };
 
 var clearPinActiveClass = function () {
-  var pinsNodeList = getPinsNodeList();
+  var activePin = pinsBlock.querySelector('.map__pin--active');
 
-  for (var i = 0; i < pinsNodeList.length; i++) {
-    if (pinsNodeList[i].classList.contains('map__pin--active')) {
-      pinsNodeList[i].classList.remove('map__pin--active');
-      pinsNodeList[i].blur();
-    }
-  }
+  activePin.classList.remove('map__pin--active');
+  activePin.blur();
 };
 
 // -------------------------------------------------------------------
