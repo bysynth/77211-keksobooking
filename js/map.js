@@ -357,3 +357,21 @@ var onTypeSelectChange = function () {
 };
 
 typeSelect.addEventListener('change', onTypeSelectChange);
+
+var timeinSelect = adForm.querySelector('#timein');
+var timeoutSelect = adForm.querySelector('#timeout');
+
+var onTimeinSelectChange = function () {
+  var timeinSelectedIndex = timeinSelect.options.selectedIndex;
+
+  timeoutSelect.options.selectedIndex = timeinSelectedIndex;
+};
+
+var onTimeoutSelectChange = function () {
+  var timeoutSelectedIndex = timeoutSelect.options.selectedIndex;
+
+  timeinSelect.options.selectedIndex = timeoutSelectedIndex;
+};
+
+timeinSelect.addEventListener('change', onTimeinSelectChange);
+timeoutSelect.addEventListener('change', onTimeoutSelectChange);
