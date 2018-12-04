@@ -6,18 +6,28 @@ var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKINS_AND_CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES_WORDS = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS_LINKS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var LOCATION_MIN_Y = 130;
-var LOCATION_MAX_Y = 630;
-var PRICE_MIN = 1000;
-var PRICE_MAX = 1000000;
-var ROOMS_MIN = 1;
-var ROOMS_MAX = 5;
+var LocationData = {
+  minY: 130,
+  maxY: 630
+};
+var PriceData = {
+  min: 1000,
+  max: 1000000
+};
+var RoomsData = {
+  min: 1,
+  max: 5
+};
+var PinData = {
+  width: 50,
+  height: 70
+};
+var MainPinData = {
+  width: 65,
+  height: 65,
+  arrowHeight: 22
+};
 var MOCKS_COUNT = 8;
-var PIN_WIDTH = 50;
-var PIN_HEIGHT = 70;
-var MAIN_PIN_WIDTH = 65;
-var MAIN_PIN_HEIGHT = 65;
-var MAIN_PIN_ARROW_HEIGHT = 22;
 var ESC_CODE = 27;
 
 // -------------------------------------------------------------------
@@ -55,8 +65,8 @@ var getMainPinInactiveCoordinates = function () {
   var mapData = getCoordinates(map);
 
   var inactiveCoordinates = {
-    top: pinData.top + Math.round(MAIN_PIN_WIDTH / 2),
-    left: pinData.left + Math.round(MAIN_PIN_HEIGHT / 2) - mapData.left
+    top: pinData.top + Math.round(MainPinData.width / 2),
+    left: pinData.left + Math.round(MainPinData.height / 2) - mapData.left
   };
   return inactiveCoordinates;
 };
@@ -66,7 +76,7 @@ var getMainPinActiveCoordinates = function () {
   var inactiveCoordinates = getMainPinInactiveCoordinates();
 
   var activeCoordinates = {
-    top: pinData.top + MAIN_PIN_HEIGHT + MAIN_PIN_ARROW_HEIGHT,
+    top: pinData.top + MainPinData.height + MainPinData.arrowHeight,
     left: inactiveCoordinates.left
   };
   return activeCoordinates;
@@ -114,15 +124,15 @@ var getElementWidth = function (element) {
 };
 
 var generateLocationX = function () {
-  var min = PIN_WIDTH / 2;
-  var max = getElementWidth(map) - PIN_WIDTH / 2;
+  var min = PinData.width / 2;
+  var max = getElementWidth(map) - PinData.width / 2;
 
   return generateRandomNumberFromRange(min, max);
 };
 
 var generateMockDataObject = function (i) {
   var locationX = generateLocationX();
-  var locationY = generateRandomNumberFromRange(LOCATION_MIN_Y, LOCATION_MAX_Y);
+  var locationY = generateRandomNumberFromRange(LocationData.minY, LocationData.maxY);
   var obj = {};
   obj.author = {
     avatar: AVATARS[i]
@@ -130,10 +140,10 @@ var generateMockDataObject = function (i) {
   obj.offer = {
     title: TITLES[i],
     address: locationX + ', ' + locationY,
-    price: generateRandomNumberFromRange(PRICE_MIN, PRICE_MAX),
+    price: generateRandomNumberFromRange(PriceData.min, PriceData.max),
     type: takeRandomElement(TYPES),
-    rooms: generateRandomNumberFromRange(ROOMS_MIN, ROOMS_MAX),
-    guests: generateRandomNumberFromRange(ROOMS_MIN, ROOMS_MAX),
+    rooms: generateRandomNumberFromRange(RoomsData.min, RoomsData.max),
+    guests: generateRandomNumberFromRange(RoomsData.min, RoomsData.max),
     checkin: takeRandomElement(CHECKINS_AND_CHECKOUTS),
     checkout: takeRandomElement(CHECKINS_AND_CHECKOUTS),
     features: shuffleArray(FEATURES_WORDS).slice(generateRandomNumberFromRange(0, FEATURES_WORDS.length - 1)),
@@ -163,8 +173,8 @@ var generatePin = function (data) {
   var button = pinElement.querySelector('button');
   var img = pinElement.querySelector('img');
 
-  button.style.left = (data.location.x - PIN_WIDTH / 2) + 'px';
-  button.style.top = (data.location.y - PIN_HEIGHT) + 'px';
+  button.style.left = (data.location.x - PinData.width / 2) + 'px';
+  button.style.top = (data.location.y - PinData.height) + 'px';
   img.src = data.author.avatar;
   img.alt = data.offer.title;
 
