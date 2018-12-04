@@ -299,6 +299,7 @@ var clearPinActiveClass = function () {
 var deleteCard = function () {
   map.querySelector('.popup').remove();
   clearPinActiveClass();
+  document.removeEventListener('keydown', onPopupKeydown);
 };
 
 // -------------------------------------------------------------------
@@ -317,7 +318,6 @@ var onPopupKeydown = function (evt) {
   if (evt.keyCode === ESC_CODE) {
     deleteCard();
   }
-  document.removeEventListener('keydown', onPopupKeydown);
 };
 
 // -------------------------------------------------------------------
