@@ -179,7 +179,7 @@ var generatePin = function (data) {
   img.alt = data.offer.title;
 
   button.addEventListener('click', function (evt) {
-    pinClickHandler(evt, data);
+    onPinClick(evt, data);
   });
 
   return pinElement;
@@ -274,7 +274,7 @@ var generateCard = function (ad) {
   }
 
   closePopup.addEventListener('click', deleteCard);
-  document.addEventListener('keydown', popupKeydownHandler);
+  document.addEventListener('keydown', onPopupKeydown);
 
   return cardElement;
 };
@@ -302,7 +302,7 @@ var deleteCard = function () {
 
 // -------------------------------------------------------------------
 
-var pinClickHandler = function (evt, data) {
+var onPinClick = function (evt, data) {
   if (map.querySelector('.popup')) {
     deleteCard();
   }
@@ -312,11 +312,11 @@ var pinClickHandler = function (evt, data) {
   evt.currentTarget.classList.add('map__pin--active');
 };
 
-var popupKeydownHandler = function (evt) {
+var onPopupKeydown = function (evt) {
   if (evt.keyCode === ESC_CODE) {
     deleteCard();
   }
-  document.removeEventListener('keydown', popupKeydownHandler);
+  document.removeEventListener('keydown', onPopupKeydown);
 };
 
 // -------------------------------------------------------------------
@@ -331,11 +331,11 @@ var activatePage = function () {
 
 // ----- Активация страницы -----
 
-var activateApplicationHandler = function () {
+var onMainPinMouseup = function () {
   activatePage();
   setAddressCoordinates(activePageAddressCoordinates);
   renderPins(mockData);
-  mainPin.removeEventListener('mouseup', activateApplicationHandler);
+  mainPin.removeEventListener('mouseup', onMainPinMouseup);
 };
 
-mainPin.addEventListener('mouseup', activateApplicationHandler);
+mainPin.addEventListener('mouseup', onMainPinMouseup);
