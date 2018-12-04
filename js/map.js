@@ -27,6 +27,24 @@ var MainPinData = {
   height: 65,
   arrowHeight: 22
 };
+var TypesData = {
+  flat: {
+    ru: 'Квартира',
+    price: 1000
+  },
+  bungalo: {
+    ru: 'Бунгало',
+    price: 0
+  },
+  house: {
+    ru: 'Дом',
+    price: 5000
+  },
+  palace: {
+    ru: 'Дворец',
+    price: 10000
+  }
+};
 var MOCKS_COUNT = 8;
 var ESC_CODE = 27;
 
@@ -218,7 +236,7 @@ var numDecline = function (count, one, two, five) {
   return five;
 };
 
-var generateCard = function (ad) {
+var generateCard = function (ad, types) {
   var cardElement = cardTemplate.cloneNode(true);
   var featuresNode = cardElement.querySelector('.popup__features');
   var avatar = cardElement.querySelector('.popup__avatar');
@@ -231,21 +249,6 @@ var generateCard = function (ad) {
   var description = cardElement.querySelector('.popup__description');
   var photos = cardElement.querySelector('.popup__photos');
   var closePopup = cardElement.querySelector('.popup__close');
-
-  var types = {
-    flat: {
-      ru: 'Квартира'
-    },
-    bungalo: {
-      ru: 'Бунгало'
-    },
-    house: {
-      ru: 'Дом'
-    },
-    palace: {
-      ru: 'Дворец'
-    }
-  };
 
   var roomsString = numDecline(ad.offer.rooms, ' комната для ', ' комнаты для ', ' комнат для ');
   var guestsString = numDecline(ad.offer.guests, ' гостя', ' гостей', ' гостей');
@@ -285,7 +288,7 @@ var mockData = generateMockDataArray();
 // -------------------------------------------------------------------
 
 var renderCard = function (dataObj) {
-  var card = generateCard(dataObj);
+  var card = generateCard(dataObj, TypesData);
   map.insertBefore(card, mapFiltersContainer);
 };
 
@@ -340,3 +343,17 @@ var onMainPinMouseup = function () {
 };
 
 mainPin.addEventListener('mouseup', onMainPinMouseup);
+
+// ----- form.js -----
+
+var typeSelect = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+
+var onTypeSelectChange = function () {
+  var selectedOptionValue = typeSelect.options[typeSelect.selectedIndex].value;
+
+  priceInput.min = TypesData[selectedOptionValue].price;
+  priceInput.placeholder = priceInput.min;
+};
+
+typeSelect.addEventListener('change', onTypeSelectChange);
