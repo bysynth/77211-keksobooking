@@ -109,17 +109,6 @@ var shuffleArray = function (array) {
   return arrayCopy;
 };
 
-var generateArrayWithRandomStrings = function (array) {
-  var shuffledArray = shuffleArray(array);
-  var result = [];
-
-  for (var i = 0; i <= generateRandomNumberFromRange(0, shuffledArray.length); i++) {
-    result[i] = shuffledArray[i];
-  }
-
-  return result;
-};
-
 var getElementWidth = function (element) {
   return element.offsetWidth;
 };
@@ -147,7 +136,7 @@ var generateMockDataObject = function (i) {
     guests: generateRandomNumberFromRange(ROOMS_MIN, ROOMS_MAX),
     checkin: takeRandomElement(CHECKINS_AND_CHECKOUTS),
     checkout: takeRandomElement(CHECKINS_AND_CHECKOUTS),
-    features: generateArrayWithRandomStrings(FEATURES_WORDS),
+    features: shuffleArray(FEATURES_WORDS).slice(generateRandomNumberFromRange(0, FEATURES_WORDS.length - 1)),
     description: '',
     photos: shuffleArray(PHOTOS_LINKS)
   };
@@ -159,27 +148,29 @@ var generateMockDataObject = function (i) {
   return obj;
 };
 
-var generateMockDataArray = function (number) {
+var generateMockDataArray = function () {
   var array = [];
 
-  for (var i = 0; i < number; i++) {
+  for (var i = 0; i < MOCKS_COUNT; i++) {
     array.push(generateMockDataObject(i));
   }
 
   return array;
 };
 
-var generatePin = function (data, i) {
+var generatePin = function (data) {
   var pinElement = pinTemplate.cloneNode(true);
   var button = pinElement.querySelector('button');
   var img = pinElement.querySelector('img');
 
-  button.style.left = (data[i].location.x - PIN_WIDTH / 2) + 'px';
-  button.style.top = (data[i].location.y - PIN_HEIGHT) + 'px';
-  img.src = data[i].author.avatar;
-  img.alt = data[i].offer.title;
+  button.style.left = (data.location.x - PIN_WIDTH / 2) + 'px';
+  button.style.top = (data.location.y - PIN_HEIGHT) + 'px';
+  img.src = data.author.avatar;
+  img.alt = data.offer.title;
 
-  button.addEventListener('click', pinClickHandler);
+  button.addEventListener('click', function (evt) {
+    pinClickHandler(evt, data);
+  });
 
   return pinElement;
 };
@@ -188,7 +179,7 @@ var renderPins = function (ads) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < ads.length; i++) {
-    fragment.appendChild(generatePin(ads, i));
+    fragment.appendChild(generatePin(ads[i]));
   }
 
   pinsBlock.appendChild(fragment);
@@ -278,7 +269,7 @@ var generateCard = function (ad) {
   return cardElement;
 };
 
-var mockData = generateMockDataArray(MOCKS_COUNT);
+var mockData = generateMockDataArray();
 
 // -------------------------------------------------------------------
 
@@ -301,18 +292,12 @@ var deleteCard = function () {
 
 // -------------------------------------------------------------------
 
-var pinClickHandler = function (evt) {
+var pinClickHandler = function (evt, data) {
   if (map.querySelector('.popup')) {
     deleteCard();
   }
 
-  var altText = evt.currentTarget.children[0].alt;
-
-  for (var i = 0; i < mockData.length; i++) {
-    if (mockData[i].offer.title === altText) {
-      renderCard(mockData[i]);
-    }
-  }
+  renderCard(data);
 
   evt.currentTarget.classList.add('map__pin--active');
 };
