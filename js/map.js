@@ -38,6 +38,7 @@ var adForm = document.querySelector('.ad-form');
 var fieldsets = adForm.querySelectorAll('fieldset');
 var addressInput = adForm.querySelector('#address');
 var pinsBlock = map.querySelector('.map__pins');
+var mapFiltersContainer = map.querySelector('.map__filters-container');
 
 var pinTemplate = document.querySelector('#pin').content;
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -285,7 +286,7 @@ var mockData = generateMockDataArray();
 
 var renderCard = function (dataObj) {
   var card = generateCard(dataObj);
-  map.insertBefore(card, map.children[1]);
+  map.insertBefore(card, mapFiltersContainer);
 };
 
 var clearPinActiveClass = function () {
