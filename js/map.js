@@ -358,6 +358,8 @@ var onTypeSelectChange = function () {
 
 typeSelect.addEventListener('change', onTypeSelectChange);
 
+// -------------------------------------------------------------------
+
 var timeinSelect = adForm.querySelector('#timein');
 var timeoutSelect = adForm.querySelector('#timeout');
 
@@ -375,3 +377,29 @@ var onTimeoutSelectChange = function () {
 
 timeinSelect.addEventListener('change', onTimeinSelectChange);
 timeoutSelect.addEventListener('change', onTimeoutSelectChange);
+
+// -------------------------------------------------------------------
+
+var CapacityData = {
+  '1': ['1'],
+  '2': ['2', '1'],
+  '3': ['3', '2', '1'],
+  '100': ['0']
+};
+
+var roomNumberSelect = adForm.querySelector('#room_number');
+var capacitySelect = adForm.querySelector('#capacity');
+
+var onRoomNumberSelectChange = function () {
+  var capacityOptionsArray = Array.from(capacitySelect.options);
+  if (capacityOptionsArray.length > 0) {
+    capacityOptionsArray.forEach(function (item) {
+      item.selected = (CapacityData[roomNumberSelect.value][0] === item.value) ? true : false;
+      item.hidden = (CapacityData[roomNumberSelect.value].indexOf(item.value) >= 0) ? false : true;
+    });
+  }
+};
+
+onRoomNumberSelectChange();
+
+roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
