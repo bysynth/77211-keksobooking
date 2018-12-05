@@ -1248,3 +1248,7 @@ fieldset {
   outline: none;
   opacity: 0.6;
 }
+
+.input--invalid {
+  box-shadow: 0 0 5px 3px red;
+}
