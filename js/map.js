@@ -413,6 +413,13 @@ var deleteAllPins = function () {
   });
 };
 
+var clearValidationMarks = function () {
+  var marks = adForm.querySelectorAll('.input--invalid');
+  marks.forEach(function (item) {
+    item.classList.remove('input--invalid');
+  });
+};
+
 var resetButton = adForm.querySelector('.ad-form__reset');
 
 var disactivatePage = function () {
@@ -431,7 +438,50 @@ var disactivatePage = function () {
 var onResetButtonClick = function (evt) {
   evt.preventDefault();
   adForm.reset();
+  clearValidationMarks();
   disactivatePage();
 };
 
 resetButton.addEventListener('click', onResetButtonClick);
+
+// ----- submit button -----
+
+var titleInput = adForm.querySelector('#title');
+var submitButton = adForm.querySelector('.ad-form__submit');
+
+var onTitleInputInput = function () {
+  titleInput.classList.remove('input--invalid');
+};
+
+var onPriceInputInput = function () {
+  priceInput.classList.remove('input--invalid');
+};
+
+var titleInputCheck = function () {
+  if (!titleInput.validity.valid) {
+    titleInput.classList.add('input--invalid');
+    titleInput.addEventListener('input', onTitleInputInput);
+    return false;
+  }
+  return true;
+};
+
+var priceInputCheck = function () {
+  if (!priceInput.validity.valid) {
+    priceInput.classList.add('input--invalid');
+    priceInput.addEventListener('input', onPriceInputInput);
+    return false;
+  }
+  return true;
+};
+
+var onAdFormSubmit = function (evt) {
+  evt.preventDefault();
+  titleInputCheck();
+  priceInputCheck();
+  if (titleInputCheck() === true && priceInputCheck() === true) {
+    adForm.submit();
+  }
+};
+
+submitButton.addEventListener('click', onAdFormSubmit);
