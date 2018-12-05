@@ -403,3 +403,35 @@ var onRoomNumberSelectChange = function () {
 onRoomNumberSelectChange();
 
 roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
+
+// ----- reset button -----
+
+var deleteAllPins = function () {
+  var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+  pins.forEach(function (item) {
+    item.remove();
+  });
+};
+
+var resetButton = adForm.querySelector('.ad-form__reset');
+
+var disactivatePage = function () {
+  if (map.querySelector('.popup')) {
+    deleteCard();
+  }
+  deleteAllPins();
+  map.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+  setAddressCoordinates(inactivePageAddressCoordinates);
+  onRoomNumberSelectChange();
+  changeFieldsetState(true);
+  mainPin.addEventListener('mouseup', onMainPinMouseup);
+};
+
+var onResetButtonClick = function (evt) {
+  evt.preventDefault();
+  adForm.reset();
+  disactivatePage();
+};
+
+resetButton.addEventListener('click', onResetButtonClick);
