@@ -475,10 +475,10 @@ var priceInputCheck = function () {
   return true;
 };
 
-var onAdFormSubmit = function (evt) {
-  evt.preventDefault();
+var onAdFormSubmit = function () {
   titleInputCheck();
   priceInputCheck();
+
   if (titleInputCheck() === true && priceInputCheck() === true) {
     adForm.submit();
   }
