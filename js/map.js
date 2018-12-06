@@ -475,7 +475,7 @@ var priceInputCheck = function () {
   return true;
 };
 
-var onAdFormSubmit = function () {
+var onSubmitButtonClick = function () {
   titleInputCheck();
   priceInputCheck();
 
@@ -484,4 +484,4 @@ var onAdFormSubmit = function () {
   }
 };
 
-submitButton.addEventListener('click', onAdFormSubmit);
+submitButton.addEventListener('click', onSubmitButtonClick);
