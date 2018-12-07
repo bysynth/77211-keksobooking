@@ -340,8 +340,8 @@ var activatePage = function () {
 // ----- Активация страницы ----- // ----- drag-n-drop -----
 
 var DragLimits = {
-  top: 130,
-  bottom: 630,
+  top: 130 - MainPinData.height - MainPinData.arrowHeight,
+  bottom: 630 - MainPinData.height - MainPinData.arrowHeight,
   left: 10,
   right: map.offsetWidth - MainPinData.width - 17
 };
