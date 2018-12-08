@@ -23,9 +23,9 @@ var PinData = {
   height: 70
 };
 var MainPinData = {
-  width: 65,
-  height: 65,
-  arrowHeight: 22
+  width: 58,
+  height: 62,
+  arrowHeight: 17
 };
 var TypesData = {
   flat: {
@@ -47,6 +47,11 @@ var TypesData = {
 };
 var MOCKS_COUNT = 8;
 var ESC_CODE = 27;
+
+var MainPinDefaulCoords = {
+  left: '570px',
+  top: '375px'
+};
 
 // -------------------------------------------------------------------
 
@@ -84,8 +89,8 @@ var getMainPinInactiveCoordinates = function () {
   var mapData = getCoordinates(map);
 
   var inactiveCoordinates = {
-    top: pinData.top + Math.round(MainPinData.width / 2),
-    left: pinData.left + Math.round(MainPinData.height / 2) - mapData.left
+    top: pinData.top + MainPinData.width / 2,
+    left: pinData.left + MainPinData.height / 2 - mapData.left
   };
   return inactiveCoordinates;
 };
@@ -325,24 +330,86 @@ var onPopupKeydown = function (evt) {
 
 // -------------------------------------------------------------------
 
-var activePageAddressCoordinates = getMainPinActiveCoordinates();
-
 var activatePage = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   changeFieldsetState(false);
-};
-
-// ----- Активация страницы -----
-
-var onMainPinMouseup = function () {
-  activatePage();
-  setAddressCoordinates(activePageAddressCoordinates);
   renderPins(mockData);
-  mainPin.removeEventListener('mouseup', onMainPinMouseup);
 };
 
-mainPin.addEventListener('mouseup', onMainPinMouseup);
+// ----- Активация страницы ----- // ----- drag-n-drop -----
+
+var DragLimits = {
+  top: 130 - MainPinData.height - MainPinData.arrowHeight,
+  bottom: 630 - MainPinData.height - MainPinData.arrowHeight,
+  left: 10,
+  right: map.offsetWidth - MainPinData.width - 17
+};
+
+var onMainPinMousedown = function (evt) {
+  evt.preventDefault();
+
+  if (map.classList.contains('map--faded')) {
+    activatePage();
+  }
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMainPinMousemove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+
+    if (mainPin.offsetTop - shift.y <= DragLimits.top) {
+      mainPin.style.top = DragLimits.top + 'px';
+    }
+
+    if (mainPin.offsetTop - shift.y >= DragLimits.bottom) {
+      mainPin.style.top = DragLimits.bottom + 'px';
+    }
+
+    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+
+    if (mainPin.offsetLeft - shift.x <= DragLimits.left) {
+      mainPin.style.left = DragLimits.left + 'px';
+    }
+
+    if (mainPin.offsetLeft - shift.x >= DragLimits.right) {
+      mainPin.style.left = DragLimits.right + 'px';
+    }
+
+    setAddressCoordinates(getMainPinActiveCoordinates());
+  };
+
+  var onMainPinMouseup = function (upEvt) {
+    upEvt.preventDefault();
+
+
+    setAddressCoordinates(getMainPinActiveCoordinates());
+
+
+    document.removeEventListener('mousemove', onMainPinMousemove);
+    document.removeEventListener('mouseup', onMainPinMouseup);
+  };
+
+  document.addEventListener('mousemove', onMainPinMousemove);
+  document.addEventListener('mouseup', onMainPinMouseup);
+};
+
+mainPin.addEventListener('mousedown', onMainPinMousedown);
 
 // ----- form.js -----
 
@@ -420,6 +487,11 @@ var clearValidationMarks = function () {
   });
 };
 
+var moveMainPinToDefaultCoord = function () {
+  mainPin.style.top = MainPinDefaulCoords.top;
+  mainPin.style.left = MainPinDefaulCoords.left;
+};
+
 var resetButton = adForm.querySelector('.ad-form__reset');
 
 var disactivatePage = function () {
@@ -432,7 +504,8 @@ var disactivatePage = function () {
   setAddressCoordinates(inactivePageAddressCoordinates);
   onRoomNumberSelectChange();
   changeFieldsetState(true);
-  mainPin.addEventListener('mouseup', onMainPinMouseup);
+  moveMainPinToDefaultCoord();
+  mainPin.addEventListener('mousedown', onMainPinMousedown);
 };
 
 var onResetButtonClick = function (evt) {
