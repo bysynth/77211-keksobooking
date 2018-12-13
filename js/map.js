@@ -14,7 +14,7 @@
     ARROW_HEIGHT: 17
   };
 
-  var DragNDropMapRestrictions = {
+  var DragNDropMapRestriction = {
     MAP_TOP: 51,
     MAP_BOTTOM: 551,
     MAP_LEFT: 10,
@@ -75,7 +75,8 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     changeFieldsetState(false);
-    window.pins.render(window.data.mocks);
+
+    window.backend.load(window.pins.render, window.messages.error);
   };
 
   var onMainPinMousedown = function (evt) {
@@ -101,19 +102,19 @@
       };
 
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      if (mainPin.offsetTop - shift.y <= DragNDropMapRestrictions.MAP_TOP) {
-        mainPin.style.top = DragNDropMapRestrictions.MAP_TOP + 'px';
+      if (mainPin.offsetTop - shift.y <= DragNDropMapRestriction.MAP_TOP) {
+        mainPin.style.top = DragNDropMapRestriction.MAP_TOP + 'px';
       }
-      if (mainPin.offsetTop - shift.y >= DragNDropMapRestrictions.MAP_BOTTOM) {
-        mainPin.style.top = DragNDropMapRestrictions.MAP_BOTTOM + 'px';
+      if (mainPin.offsetTop - shift.y >= DragNDropMapRestriction.MAP_BOTTOM) {
+        mainPin.style.top = DragNDropMapRestriction.MAP_BOTTOM + 'px';
       }
 
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-      if (mainPin.offsetLeft - shift.x <= DragNDropMapRestrictions.MAP_LEFT) {
-        mainPin.style.left = DragNDropMapRestrictions.MAP_LEFT + 'px';
+      if (mainPin.offsetLeft - shift.x <= DragNDropMapRestriction.MAP_LEFT) {
+        mainPin.style.left = DragNDropMapRestriction.MAP_LEFT + 'px';
       }
-      if (mainPin.offsetLeft - shift.x >= map.offsetWidth - DragNDropMapRestrictions.MAP_RIGHT) {
-        mainPin.style.left = map.offsetWidth - DragNDropMapRestrictions.MAP_RIGHT + 'px';
+      if (mainPin.offsetLeft - shift.x >= map.offsetWidth - DragNDropMapRestriction.MAP_RIGHT) {
+        mainPin.style.left = map.offsetWidth - DragNDropMapRestriction.MAP_RIGHT + 'px';
       }
 
       setAddressCoordinates(getMainPinActiveCoordinates());
