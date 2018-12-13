@@ -9,58 +9,37 @@ window.backend = (function () {
   var STATUS_OK = 200;
   var TIMEOUT = 10000;
 
-  return {
+  var ajax = function (data, onLoad, onError, method, uri) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
 
-    load: function (onLoad, onError) {
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
+    xhr.addEventListener('load', function () {
+      if (xhr.status === STATUS_OK) {
+        onLoad(xhr.response);
+      } else {
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+      }
+    });
 
-      xhr.addEventListener('load', function () {
-        if (xhr.status === STATUS_OK) {
-          onLoad(xhr.response);
-        } else {
-          onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-        }
-      });
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
 
-      xhr.addEventListener('error', function () {
-        onError('Произошла ошибка соединения');
-      });
-      xhr.addEventListener('timeout', function () {
-        onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-      });
+    xhr.timeout = TIMEOUT;
 
-      xhr.timeout = TIMEOUT;
-
-      xhr.open('GET', url.LOAD);
-      xhr.send();
-    },
-
-    save: function (data, onLoad, onError) {
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
-
-      xhr.addEventListener('load', function () {
-        if (xhr.status === STATUS_OK) {
-          onLoad();
-        } else {
-          onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-        }
-      });
-
-      xhr.addEventListener('error', function () {
-        onError('Произошла ошибка соединения');
-      });
-      xhr.addEventListener('timeout', function () {
-        onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-      });
-
-      xhr.timeout = TIMEOUT;
-
-      xhr.open('POST', url.SAVE);
-      xhr.send(data);
-    }
-
+    xhr.open(method, uri);
+    xhr.send(data);
   };
 
+  return {
+    load: function (onLoad, onError) {
+      ajax(null, onLoad, onError, 'GET', url.LOAD);
+    },
+    save: function (data, onLoad, onError) {
+      ajax(data, onLoad, onError, 'POST', url.SAVE);
+    }
+  };
 })();
