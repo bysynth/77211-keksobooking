@@ -23,26 +23,66 @@
     var guestsString = window.utils.numDecline(ad.offer.guests, ' гостя', ' гостей', ' гостей');
 
     avatar.src = ad.author.avatar;
-    title.textContent = ad.offer.title;
-    address.textContent = ad.offer.address;
-    price.textContent = ad.offer.price + '₽/ночь';
-    type.textContent = types[ad.offer.type].ru;
-    capacity.textContent = ad.offer.rooms + roomsString + ad.offer.guests + guestsString;
-    time.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
 
-    window.utils.clearNode(featuresNode);
-
-    for (var i = 0; i < ad.offer.features.length; i++) {
-      var feature = ad.offer.features[i];
-      featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + feature + '"></li>');
+    if (ad.offer.title) {
+      title.textContent = ad.offer.title;
+    } else {
+      title.remove();
     }
 
-    description.textContent = ad.offer.description;
+    if (ad.offer.address) {
+      address.textContent = ad.offer.address;
+    } else {
+      address.remove();
+    }
 
-    window.utils.clearNode(photos);
+    if (ad.offer.price) {
+      price.textContent = ad.offer.price + '₽/ночь';
+    } else {
+      price.remove();
+    }
 
-    for (var j = 0; j < ad.offer.photos.length; j++) {
-      photos.insertAdjacentHTML('beforeend', '<img src="' + ad.offer.photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+    if (ad.offer.type) {
+      type.textContent = types[ad.offer.type].ru;
+    } else {
+      type.remove();
+    }
+
+    if (ad.offer.rooms && ad.offer.guests) {
+      capacity.textContent = ad.offer.rooms + roomsString + ad.offer.guests + guestsString;
+    } else {
+      capacity.remove();
+    }
+
+    if (ad.offer.checkin && ad.offer.checkout) {
+      time.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
+    } else {
+      time.remove();
+    }
+
+    if (ad.offer.features && ad.offer.features.length !== 0) {
+      window.utils.clearNode(featuresNode);
+      for (var i = 0; i < ad.offer.features.length; i++) {
+        var feature = ad.offer.features[i];
+        featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + feature + '"></li>');
+      }
+    } else {
+      featuresNode.remove();
+    }
+
+    if (ad.offer.description) {
+      description.textContent = ad.offer.description;
+    } else {
+      description.remove();
+    }
+
+    if (ad.offer.photos && ad.offer.photos.length !== 0) {
+      window.utils.clearNode(photos);
+      for (var j = 0; j < ad.offer.photos.length; j++) {
+        photos.insertAdjacentHTML('beforeend', '<img src="' + ad.offer.photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+      }
+    } else {
+      photos.remove();
     }
 
     closePopup.addEventListener('click', deleteCard);
