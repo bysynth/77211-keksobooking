@@ -9,9 +9,7 @@
     if (window.map.mapBlock.querySelector('.popup')) {
       window.card.delete();
     }
-
     window.card.render(data);
-
     evt.currentTarget.classList.add('map__pin--active');
   };
 
@@ -33,7 +31,9 @@
   var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < ads.length; i++) {
-      fragment.appendChild(generatePin(ads[i]));
+      if (ads[i].hasOwnProperty('offer')) {
+        fragment.appendChild(generatePin(ads[i]));
+      }
     }
     pinsBlock.appendChild(fragment);
   };
