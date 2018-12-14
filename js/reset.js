@@ -6,7 +6,7 @@
   var adForm = document.querySelector('.ad-form');
   var resetButton = window.map.form.querySelector('.ad-form__reset');
 
-  var MainPinDefaulCoords = {
+  var MainPinDefaulCoord = {
     LEFT: '570px',
     TOP: '375px'
   };
@@ -26,8 +26,8 @@
   };
 
   var moveMainPinToDefaultCoord = function () {
-    mainPin.style.top = MainPinDefaulCoords.TOP;
-    mainPin.style.left = MainPinDefaulCoords.LEFT;
+    mainPin.style.top = MainPinDefaulCoord.TOP;
+    mainPin.style.left = MainPinDefaulCoord.LEFT;
   };
 
   var disactivatePage = function () {
@@ -37,6 +37,7 @@
     deleteAllPins();
     window.map.mapBlock.classList.add('map--faded');
     window.map.form.classList.add('ad-form--disabled');
+    window.map.form.reset();
     window.map.setAddressCoordinates(window.map.inactivePageAddressCoordinates);
     window.form.roomsNumberSync();
     window.map.changeFieldsetState(true);
@@ -46,11 +47,12 @@
 
   var onResetButtonClick = function (evt) {
     evt.preventDefault();
-    window.map.form.reset();
     clearValidationMarks();
     disactivatePage();
   };
 
   resetButton.addEventListener('click', onResetButtonClick);
+
+  window.reset = disactivatePage;
 
 })();

@@ -18,29 +18,28 @@
     if (!titleInput.validity.valid) {
       titleInput.classList.add('input--invalid');
       titleInput.addEventListener('input', onTitleInputInput);
-      return false;
     }
-    return true;
   };
 
   var priceInputCheck = function () {
     if (!priceInput.validity.valid) {
       priceInput.classList.add('input--invalid');
       priceInput.addEventListener('input', onPriceInputInput);
-      return false;
     }
-    return true;
   };
 
   var onSubmitButtonClick = function () {
     titleInputCheck();
     priceInputCheck();
-
-    if (titleInputCheck() === true && priceInputCheck() === true) {
-      window.map.form.submit();
-    }
   };
 
   submitButton.addEventListener('click', onSubmitButtonClick);
+
+  var onFormSubmit = function (evt) {
+    window.backend.save(new FormData(window.map.form), window.messages.success, window.messages.error);
+    evt.preventDefault();
+  };
+
+  window.map.form.addEventListener('submit', onFormSubmit);
 
 })();

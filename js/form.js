@@ -14,8 +14,6 @@
 
   typeSelect.addEventListener('change', onTypeSelectChange);
 
-  // -------------------------------------------------------------------
-
   var timeinSelect = window.map.form.querySelector('#timein');
   var timeoutSelect = window.map.form.querySelector('#timeout');
 
@@ -33,8 +31,6 @@
 
   timeinSelect.addEventListener('change', onTimeinSelectChange);
   timeoutSelect.addEventListener('change', onTimeoutSelectChange);
-
-  // -------------------------------------------------------------------
 
   var CapacityData = {
     '1': ['1'],
