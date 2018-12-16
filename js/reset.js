@@ -39,6 +39,7 @@
     window.map.form.classList.add('ad-form--disabled');
     window.map.form.reset();
     window.map.setAddressCoordinates(window.map.inactivePageAddressCoordinates);
+    window.form.onTypeSelectChange();
     window.form.roomsNumberSync();
     window.map.changeFieldsetState(true);
     moveMainPinToDefaultCoord();

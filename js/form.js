@@ -57,7 +57,8 @@
   roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
 
   window.form = {
-    roomsNumberSync: onRoomNumberSelectChange
+    roomsNumberSync: onRoomNumberSelectChange,
+    onTypeSelectChange: onTypeSelectChange
   };
 
 })();
