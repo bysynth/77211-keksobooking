@@ -27,7 +27,7 @@ window.utils = (function () {
       }
       return five;
     },
-    debounce: function (cb, interval) {
+    debounce: function (cb, time) {
       var lastTimeout = null;
       return function () {
         var parameters = arguments;
@@ -36,7 +36,7 @@ window.utils = (function () {
         }
         lastTimeout = window.setTimeout(function () {
           cb.apply(null, parameters);
-        }, interval);
+        }, time);
       };
     }
   };
