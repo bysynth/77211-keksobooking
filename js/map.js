@@ -7,6 +7,8 @@
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
   var fieldsets = adForm.querySelectorAll('fieldset');
+  var filtersForm = map.querySelector('.map__filters');
+  var offers = [];
 
   var MainPinData = {
     WIDTH: 58,
@@ -71,12 +73,17 @@
   var inactivePageAddressCoordinates = getMainPinInactiveCoordinates();
   setAddressCoordinates(inactivePageAddressCoordinates);
 
+  var onLoad = function (dataArray) {
+    offers = dataArray.slice();
+    window.pins.render(offers);
+  };
+
   var activatePage = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     changeFieldsetState(false);
 
-    window.backend.load(window.pins.render, window.messages.error);
+    window.backend.load(onLoad, window.messages.error);
   };
 
   var onMainPinMousedown = function (evt) {
@@ -133,9 +140,16 @@
 
   mainPin.addEventListener('mousedown', onMainPinMousedown);
 
+  var onFiltersFormChange = window.utils.debounce(function () {
+    window.filters.updatePins(offers);
+  }, 500);
+
+  filtersForm.addEventListener('change', onFiltersFormChange);
+
   window.map = {
     mapBlock: map,
     form: adForm,
+    filtersForm: filtersForm,
     mainPin: mainPin,
     setAddressCoordinates: setAddressCoordinates,
     inactivePageAddressCoordinates: inactivePageAddressCoordinates,
