@@ -54,6 +54,9 @@
 
   resetButton.addEventListener('click', onResetButtonClick);
 
-  window.reset = disactivatePage;
+  window.reset = {
+    disactivatePage: disactivatePage,
+    deleteAllPins: deleteAllPins
+  };
 
 })();
