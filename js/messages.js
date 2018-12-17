@@ -64,7 +64,7 @@ window.messages = (function () {
       document.addEventListener('click', onSuccessClick);
 
       main.appendChild(successElement);
-      window.reset();
+      window.reset.deleteAllPins();
     }
   };
 })();
