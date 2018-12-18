@@ -97,7 +97,10 @@
   };
 
   var deleteCard = function () {
-    window.map.mapBlock.querySelector('.popup').remove();
+    var card = window.map.mapBlock.querySelector('.popup');
+    if (card) {
+      card.remove();
+    }
     window.pins.clearActivePin();
     document.removeEventListener('keydown', onCardKeydown);
   };

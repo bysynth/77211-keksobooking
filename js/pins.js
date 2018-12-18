@@ -30,7 +30,8 @@
 
   var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < ads.length; i++) {
+    var pinNumber = ads.length > 5 ? 5 : ads.length;
+    for (var i = 0; i < pinNumber; i++) {
       if (ads[i].hasOwnProperty('offer')) {
         fragment.appendChild(generatePin(ads[i]));
       }
@@ -40,8 +41,10 @@
 
   var clearPinActiveClass = function () {
     var activePin = pinsBlock.querySelector('.map__pin--active');
-    activePin.classList.remove('map__pin--active');
-    activePin.blur();
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+      activePin.blur();
+    }
   };
 
   window.pins = {
