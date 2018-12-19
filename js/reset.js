@@ -42,6 +42,8 @@
     window.form.onTypeSelectChange();
     window.form.roomsNumberSync();
     window.map.changeFieldsetState(true);
+    window.images.clearAvatar();
+    window.images.clearPhotos();
     moveMainPinToDefaultCoord();
     mainPin.addEventListener('mousedown', window.map.onMainPinMousedown);
   };
