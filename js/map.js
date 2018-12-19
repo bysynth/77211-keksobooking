@@ -154,6 +154,7 @@
     form: adForm,
     filtersForm: filtersForm,
     adFromFieldsets: adFromFieldsets,
+    mapFiltersCollection: mapFiltersCollection,
     mainPin: mainPin,
     setAddressCoordinates: setAddressCoordinates,
     inactivePageAddressCoordinates: inactivePageAddressCoordinates,
