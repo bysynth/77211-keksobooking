@@ -6,8 +6,9 @@
   var mainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
-  var fieldsets = adForm.querySelectorAll('fieldset');
+  var adFromFieldsets = adForm.querySelectorAll('fieldset');
   var filtersForm = map.querySelector('.map__filters');
+  var mapFiltersCollection = map.querySelector('.map__filters').children;
   var offers = [];
 
   var MainPinData = {
@@ -23,9 +24,9 @@
     MAP_RIGHT: 75
   };
 
-  var changeFieldsetState = function (state) {
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = state;
+  var changeFormFieldsState = function (elementsCollection, state) {
+    for (var i = 0; i < elementsCollection.length; i++) {
+      elementsCollection[i].disabled = state;
     }
   };
 
@@ -69,19 +70,21 @@
     return value;
   };
 
-  changeFieldsetState(true);
+  changeFormFieldsState(mapFiltersCollection, true);
+  changeFormFieldsState(adFromFieldsets, true);
   var inactivePageAddressCoordinates = getMainPinInactiveCoordinates();
   setAddressCoordinates(inactivePageAddressCoordinates);
 
   var onLoad = function (dataArray) {
     offers = dataArray.slice();
     window.pins.render(offers);
+    changeFormFieldsState(mapFiltersCollection, false);
   };
 
   var activatePage = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    changeFieldsetState(false);
+    changeFormFieldsState(adFromFieldsets, false);
 
     window.backend.load(onLoad, window.messages.error);
   };
@@ -150,10 +153,12 @@
     mapBlock: map,
     form: adForm,
     filtersForm: filtersForm,
+    adFromFieldsets: adFromFieldsets,
+    mapFiltersCollection: mapFiltersCollection,
     mainPin: mainPin,
     setAddressCoordinates: setAddressCoordinates,
     inactivePageAddressCoordinates: inactivePageAddressCoordinates,
-    changeFieldsetState: changeFieldsetState,
+    changeFormFieldsState: changeFormFieldsState,
     onMainPinMousedown: onMainPinMousedown
   };
 

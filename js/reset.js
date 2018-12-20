@@ -41,7 +41,10 @@
     window.map.setAddressCoordinates(window.map.inactivePageAddressCoordinates);
     window.form.onTypeSelectChange();
     window.form.roomsNumberSync();
-    window.map.changeFieldsetState(true);
+    window.map.changeFormFieldsState(window.map.mapFiltersCollection, true);
+    window.map.changeFormFieldsState(window.map.adFromFieldsets, true);
+    window.images.clearAvatar();
+    window.images.clearPhotos();
     moveMainPinToDefaultCoord();
     mainPin.addEventListener('mousedown', window.map.onMainPinMousedown);
   };
