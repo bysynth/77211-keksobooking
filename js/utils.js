@@ -1,6 +1,7 @@
 'use strict';
 
 window.utils = (function () {
+
   var ESC_CODE = 27;
 
   return {

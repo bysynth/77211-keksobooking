@@ -2,14 +2,14 @@
 
 (function () {
 
-  var mainPin = window.map.mapBlock.querySelector('.map__pin--main');
-  var adForm = document.querySelector('.ad-form');
-  var resetButton = window.map.form.querySelector('.ad-form__reset');
-
   var MainPinDefaulCoord = {
     LEFT: '570px',
     TOP: '375px'
   };
+
+  var mainPin = window.map.mapBlock.querySelector('.map__pin--main');
+  var adForm = document.querySelector('.ad-form');
+  var resetButton = window.map.form.querySelector('.ad-form__reset');
 
   var deleteAllPins = function () {
     var pins = window.map.mapBlock.querySelectorAll('.map__pin:not(.map__pin--main)');
