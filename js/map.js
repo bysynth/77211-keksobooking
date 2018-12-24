@@ -2,15 +2,6 @@
 
 (function () {
 
-  var map = document.querySelector('.map');
-  var mainPin = map.querySelector('.map__pin--main');
-  var adForm = document.querySelector('.ad-form');
-  var addressInput = adForm.querySelector('#address');
-  var adFromFieldsets = adForm.querySelectorAll('fieldset');
-  var filtersForm = map.querySelector('.map__filters');
-  var mapFiltersCollection = map.querySelector('.map__filters').children;
-  var offers = [];
-
   var MainPinData = {
     WIDTH: 58,
     HEIGHT: 62,
@@ -23,6 +14,15 @@
     MAP_LEFT: 10,
     MAP_RIGHT: 75
   };
+
+  var map = document.querySelector('.map');
+  var mainPin = map.querySelector('.map__pin--main');
+  var adForm = document.querySelector('.ad-form');
+  var addressInput = adForm.querySelector('#address');
+  var adFromFieldsets = adForm.querySelectorAll('fieldset');
+  var filtersForm = map.querySelector('.map__filters');
+  var mapFiltersCollection = map.querySelector('.map__filters').children;
+  var offers = [];
 
   var changeFormFieldsState = function (elementsCollection, state) {
     for (var i = 0; i < elementsCollection.length; i++) {
