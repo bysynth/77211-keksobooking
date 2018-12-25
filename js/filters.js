@@ -10,9 +10,9 @@
   var updatePins = function (offers) {
     var filteredOffers = offers.slice();
 
-    var selectors = Array.from(window.map.filtersForm.querySelectorAll('.map__filter'));
+    var selects = Array.from(window.map.filtersForm.querySelectorAll('.map__filter'));
     var checkboxes = Array.from(window.map.filtersForm.querySelectorAll('.map__checkbox:checked'));
-    var filterInputs = selectors.concat(checkboxes);
+    var filterInputs = selects.concat(checkboxes);
 
     var Rule = {
       'housing-type': 'type',
