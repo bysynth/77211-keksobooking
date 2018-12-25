@@ -1,15 +1,15 @@
 'use strict';
 
 window.backend = (function () {
-  var url = {
+  var STATUS_OK = 200;
+  var TIMEOUT = 10000;
+
+  var Url = {
     LOAD: 'https://js.dump.academy/keksobooking/data',
     SAVE: 'https://js.dump.academy/keksobooking'
   };
 
-  var STATUS_OK = 200;
-  var TIMEOUT = 10000;
-
-  var ajax = function (data, onLoad, onError, method, uri) {
+  var ajax = function (onLoad, onError, method, uri, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -36,10 +36,10 @@ window.backend = (function () {
 
   return {
     load: function (onLoad, onError) {
-      ajax(null, onLoad, onError, 'GET', url.LOAD);
+      ajax(onLoad, onError, 'GET', Url.LOAD);
     },
     save: function (data, onLoad, onError) {
-      ajax(data, onLoad, onError, 'POST', url.SAVE);
+      ajax(onLoad, onError, 'POST', Url.SAVE, data);
     }
   };
 })();

@@ -2,6 +2,8 @@
 
 (function () {
 
+  var PINS_LIMIT = 5;
+
   var pinTemplate = document.querySelector('#pin').content;
   var pinsBlock = window.map.mapBlock.querySelector('.map__pins');
 
@@ -30,8 +32,8 @@
 
   var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
-    var pinNumber = ads.length > 5 ? 5 : ads.length;
-    for (var i = 0; i < pinNumber; i++) {
+    var pinsNumber = ads.length > PINS_LIMIT ? PINS_LIMIT : ads.length;
+    for (var i = 0; i < pinsNumber; i++) {
       if (ads[i].hasOwnProperty('offer')) {
         fragment.appendChild(generatePin(ads[i]));
       }

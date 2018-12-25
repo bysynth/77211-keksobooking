@@ -2,7 +2,7 @@
 
 (function () {
 
-  var ComparePrice = {
+  var PriceLimit = {
     LOW: 10000,
     HIGH: 50000
   };
@@ -10,17 +10,15 @@
   var updatePins = function (offers) {
     var filteredOffers = offers.slice();
 
-    var selectorFilters = window.map.filtersForm.querySelectorAll('.map__filter');
-    var featuresFilters = window.map.filtersForm.querySelectorAll('.map__checkbox:checked');
+    var selects = Array.from(window.map.filtersForm.querySelectorAll('.map__filter'));
+    var checkboxes = Array.from(window.map.filtersForm.querySelectorAll('.map__checkbox:checked'));
+    var filterInputs = selects.concat(checkboxes);
 
-    var FilterRules = {
+    var Rule = {
       'housing-type': 'type',
       'housing-rooms': 'rooms',
       'housing-guests': 'guests'
     };
-
-    window.reset.deleteAllPins();
-    window.card.delete();
 
     var filterByValue = function (element, property) {
       return filteredOffers.filter(function (offerData) {
@@ -30,13 +28,19 @@
 
     var filterByPrice = function (priceFilter) {
       return filteredOffers.filter(function (offerData) {
-        var priceFilterValues = {
-          'middle': offerData.offer.price >= ComparePrice.LOW && offerData.offer.price < ComparePrice.HIGH,
-          'low': offerData.offer.price < ComparePrice.LOW,
-          'high': offerData.offer.price >= ComparePrice.HIGH
-        };
-
-        return priceFilterValues[priceFilter.value];
+        var result;
+        switch (priceFilter.value) {
+          case 'middle':
+            result = offerData.offer.price >= PriceLimit.LOW && offerData.offer.price < PriceLimit.HIGH;
+            break;
+          case 'low':
+            result = offerData.offer.price < PriceLimit.LOW;
+            break;
+          case 'high':
+            result = offerData.offer.price >= PriceLimit.HIGH;
+            break;
+        }
+        return result;
       });
     };
 
@@ -46,27 +50,19 @@
       });
     };
 
-    if (selectorFilters.length !== null) {
-      selectorFilters.forEach(function (item) {
-        if (item.value !== 'any') {
-          if (item.id !== 'housing-price') {
-            filteredOffers = filterByValue(item, FilterRules[item.id]);
-          } else {
-            filteredOffers = filterByPrice(item);
-          }
-        }
-      });
-    }
-
-    if (featuresFilters !== null) {
-      featuresFilters.forEach(function (item) {
+    filterInputs.forEach(function (item) {
+      if (item.tagName === 'SELECT' && item.value !== 'any') {
+        filteredOffers = (item.id !== 'housing-price') ? filterByValue(item, Rule[item.id]) : filterByPrice(item);
+      } else if (item.tagName === 'INPUT') {
         filteredOffers = filterByFeatures(item);
-      });
-    }
+      }
+    });
 
-    if (filteredOffers.length) {
-      window.pins.render(filteredOffers);
-    }
+    window.reset.deleteAllPins();
+    window.card.delete();
+
+    window.pins.render(filteredOffers);
+
 
   };
 

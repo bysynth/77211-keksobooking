@@ -2,6 +2,8 @@
 
 (function () {
 
+  var DEBOUCE_INTERVAL = 500;
+
   var MainPinData = {
     WIDTH: 58,
     HEIGHT: 62,
@@ -111,19 +113,22 @@
         y: moveEvt.clientY
       };
 
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      if (mainPin.offsetTop - shift.y <= DragNDropMapRestriction.MAP_TOP) {
+      var topCoord = mainPin.offsetTop - shift.y;
+      var leftCoord = mainPin.offsetLeft - shift.x;
+
+      mainPin.style.top = topCoord + 'px';
+      if (topCoord <= DragNDropMapRestriction.MAP_TOP) {
         mainPin.style.top = DragNDropMapRestriction.MAP_TOP + 'px';
       }
-      if (mainPin.offsetTop - shift.y >= DragNDropMapRestriction.MAP_BOTTOM) {
+      if (topCoord >= DragNDropMapRestriction.MAP_BOTTOM) {
         mainPin.style.top = DragNDropMapRestriction.MAP_BOTTOM + 'px';
       }
 
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-      if (mainPin.offsetLeft - shift.x <= DragNDropMapRestriction.MAP_LEFT) {
+      mainPin.style.left = leftCoord + 'px';
+      if (leftCoord <= DragNDropMapRestriction.MAP_LEFT) {
         mainPin.style.left = DragNDropMapRestriction.MAP_LEFT + 'px';
       }
-      if (mainPin.offsetLeft - shift.x >= map.offsetWidth - DragNDropMapRestriction.MAP_RIGHT) {
+      if (leftCoord >= map.offsetWidth - DragNDropMapRestriction.MAP_RIGHT) {
         mainPin.style.left = map.offsetWidth - DragNDropMapRestriction.MAP_RIGHT + 'px';
       }
 
@@ -145,7 +150,7 @@
 
   var onFiltersFormChange = window.utils.debounce(function () {
     window.filters.updatePins(offers);
-  }, 500);
+  }, DEBOUCE_INTERVAL);
 
   filtersForm.addEventListener('change', onFiltersFormChange);
 

@@ -46,8 +46,8 @@
     var capacityOptionsArray = Array.from(capacitySelect.options);
     if (capacityOptionsArray.length > 0) {
       capacityOptionsArray.forEach(function (item) {
-        item.selected = (CapacityData[roomNumberSelect.value][0] === item.value) ? true : false;
-        item.hidden = (CapacityData[roomNumberSelect.value].indexOf(item.value) >= 0) ? false : true;
+        item.selected = (CapacityData[roomNumberSelect.value][0] === item.value);
+        item.hidden = !(CapacityData[roomNumberSelect.value].indexOf(item.value) >= 0);
       });
     }
   };
