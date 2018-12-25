@@ -62,10 +62,9 @@
 
     if (ad.offer.features && ad.offer.features.length !== 0) {
       window.utils.clearNode(featuresNode);
-      for (var i = 0; i < ad.offer.features.length; i++) {
-        var feature = ad.offer.features[i];
+      ad.offer.features.forEach(function (feature) {
         featuresNode.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + feature + '"></li>');
-      }
+      });
     } else {
       featuresNode.remove();
     }
@@ -78,9 +77,9 @@
 
     if (ad.offer.photos && ad.offer.photos.length !== 0) {
       window.utils.clearNode(photos);
-      for (var j = 0; j < ad.offer.photos.length; j++) {
-        photos.insertAdjacentHTML('beforeend', '<img src="' + ad.offer.photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
-      }
+      ad.offer.photos.forEach(function (photo) {
+        photos.insertAdjacentHTML('beforeend', '<img src="' + photo + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+      });
     } else {
       photos.remove();
     }
